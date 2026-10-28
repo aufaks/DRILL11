@@ -43,7 +43,11 @@ class Boy:
                     'dest': 'RUN',
                 },
                 {'trigger': 'stop_running', 'source': 'RUN', 'dest': 'IDLE'},
-                {'trigger': 'start_auto_run', 'source': 'IDLE', 'dest': 'AUTORUN'},
+                {
+                    'trigger': 'start_auto_run',
+                    'source': ['IDLE', 'RUN', 'SLEEP'],
+                    'dest': 'AUTORUN',
+                },
                 {'trigger': 'stop_auto_run', 'source': 'AUTORUN', 'dest': 'IDLE'},
             ],
             initial='IDLE',
@@ -76,7 +80,11 @@ class Boy:
         if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE and self.state == 'SLEEP':
             self.wake_up()
             self.idle_started_at = monotonic()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_a and self.state == 'IDLE':
+        elif (
+            event.type == SDL_KEYDOWN
+            and event.key == SDLK_a
+            and self.state in ('IDLE', 'RUN', 'SLEEP')
+        ):
             self.start_auto_run()
             self.frame = 0
         elif event.type in (SDL_KEYDOWN, SDL_KEYUP) and event.key in (SDLK_LEFT, SDLK_RIGHT):

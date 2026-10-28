@@ -41,7 +41,7 @@ class BoyAutoRunTests(unittest.TestCase):
     def send_key(self, character, event_type, key):
         character.handle_event(SimpleNamespace(type=event_type, key=key))
 
-    def test_a_starts_autorun_and_arrow_key_takes_over(self):
+    def test_a_starts_autorun_from_idle_and_arrow_key_takes_over(self):
         character = self.make_boy()
         with patch.object(autorun, 'monotonic', return_value=100):
             self.send_key(character, boy.SDL_KEYDOWN, boy.SDLK_a)
@@ -54,6 +54,29 @@ class BoyAutoRunTests(unittest.TestCase):
         self.assertEqual(character.face_dir, -1)
         character.update()
         self.assertEqual(character.x, 407)
+
+    def test_a_starts_autorun_from_run(self):
+        character = self.make_boy()
+        self.send_key(character, boy.SDL_KEYDOWN, boy.SDLK_RIGHT)
+        self.assertEqual(character.state, 'RUN')
+
+        with patch.object(autorun, 'monotonic', return_value=100):
+            self.send_key(character, boy.SDL_KEYDOWN, boy.SDLK_a)
+
+        self.assertEqual(character.state, 'AUTORUN')
+        self.assertEqual(character.auto_run.started_at, 100)
+
+    def test_a_starts_autorun_from_sleep(self):
+        character = self.make_boy()
+        with patch.object(boy, 'monotonic', return_value=105):
+            character.update()
+        self.assertEqual(character.state, 'SLEEP')
+
+        with patch.object(autorun, 'monotonic', return_value=200):
+            self.send_key(character, boy.SDL_KEYDOWN, boy.SDLK_a)
+
+        self.assertEqual(character.state, 'AUTORUN')
+        self.assertEqual(character.auto_run.started_at, 200)
 
     def test_autorun_returns_to_idle_after_five_seconds(self):
         character = self.make_boy()

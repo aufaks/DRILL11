@@ -63,6 +63,13 @@ class Boy:
         elif self.state == 'RUN':
             self.x = max(50, min(750, self.x + self.face_dir * 5))
             self.frame = (self.frame + 1) % 8
+        elif self.state == 'AUTORUN':
+            self.x, self.face_dir = self.auto_run.move(self.x, self.face_dir)
+            self.frame = (self.frame + 1) % 8
+            if self.auto_run.is_finished():
+                self.stop_auto_run()
+                self.frame = 0
+                self.idle_started_at = monotonic()
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE and self.state == 'SLEEP':

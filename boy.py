@@ -80,7 +80,7 @@ class Boy:
             self.start_auto_run()
             self.frame = 0
         elif event.type in (SDL_KEYDOWN, SDL_KEYUP) and event.key in (SDLK_LEFT, SDLK_RIGHT):
-            if self.state not in ('IDLE', 'RUN', 'SLEEP'):
+            if self.state not in ('IDLE', 'RUN', 'SLEEP', 'AUTORUN'):
                 return
 
             direction = -1 if event.key == SDLK_LEFT else 1
@@ -88,7 +88,7 @@ class Boy:
                 if direction not in self.directions:
                     self.directions.append(direction)
                 self.face_dir = direction
-                if self.state in ('IDLE', 'SLEEP'):
+                if self.state in ('IDLE', 'SLEEP', 'AUTORUN'):
                     self.start_running()
                     self.frame = 0
             elif direction in self.directions:

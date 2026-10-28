@@ -14,3 +14,11 @@ class AutoRunState:
 
     def enter(self):
         self.started_at = monotonic()
+
+    def move(self, x, face_dir):
+        x += face_dir * self.SPEED
+        if x <= self.MIN_X:
+            return self.MIN_X, 1
+        if x >= self.MAX_X:
+            return self.MAX_X, -1
+        return x, face_dir

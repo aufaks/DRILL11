@@ -27,3 +27,16 @@ class AutoRunState:
         if self.started_at is None:
             raise RuntimeError('AutoRunState must be entered before checking its duration')
         return monotonic() - self.started_at >= self.DURATION
+
+    def draw(self, image, frame, face_dir, x):
+        row = 100 if face_dir == 1 else 0
+        image.clip_draw(
+            frame * 100,
+            row,
+            100,
+            100,
+            x,
+            self.DRAW_Y,
+            self.DRAW_SIZE,
+            self.DRAW_SIZE,
+        )

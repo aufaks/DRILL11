@@ -13,6 +13,8 @@ from pico2d import (
 import pico2d.pico2d as pico2d_impl
 from transitions import Machine
 
+from autorun import AutoRunState
+
 
 class Boy:
     def __init__(self):
@@ -20,6 +22,7 @@ class Boy:
         self.frame = 0
         self.face_dir = 1
         self.directions = []
+        self.auto_run = AutoRunState()
         image_path = Path(__file__).resolve().parent / 'animation_sheet.png'
         self.image = load_image(str(image_path))
         self.machine = Machine(

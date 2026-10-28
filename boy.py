@@ -8,6 +8,7 @@ from pico2d import (
     SDLK_LEFT,
     SDLK_RIGHT,
     SDLK_SPACE,
+    SDLK_a,
     load_image,
 )
 import pico2d.pico2d as pico2d_impl
@@ -75,6 +76,9 @@ class Boy:
         if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE and self.state == 'SLEEP':
             self.wake_up()
             self.idle_started_at = monotonic()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_a and self.state == 'IDLE':
+            self.start_auto_run()
+            self.frame = 0
         elif event.type in (SDL_KEYDOWN, SDL_KEYUP) and event.key in (SDLK_LEFT, SDLK_RIGHT):
             if self.state not in ('IDLE', 'RUN', 'SLEEP'):
                 return

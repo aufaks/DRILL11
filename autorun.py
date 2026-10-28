@@ -22,3 +22,8 @@ class AutoRunState:
         if x >= self.MAX_X:
             return self.MAX_X, -1
         return x, face_dir
+
+    def is_finished(self):
+        if self.started_at is None:
+            raise RuntimeError('AutoRunState must be entered before checking its duration')
+        return monotonic() - self.started_at >= self.DURATION

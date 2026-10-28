@@ -27,7 +27,12 @@ class Boy:
         self.image = load_image(str(image_path))
         self.machine = Machine(
             model=self,
-            states=['IDLE', 'RUN', 'SLEEP', 'AUTORUN'],
+            states=[
+                'IDLE',
+                'RUN',
+                'SLEEP',
+                {'name': 'AUTORUN', 'on_enter': 'enter_auto_run'},
+            ],
             transitions=[
                 {'trigger': 'sleep', 'source': 'IDLE', 'dest': 'SLEEP'},
                 {'trigger': 'wake_up', 'source': 'SLEEP', 'dest': 'IDLE'},
@@ -44,6 +49,9 @@ class Boy:
             auto_transitions=False,
         )
         self.idle_started_at = monotonic()
+
+    def enter_auto_run(self):
+        self.auto_run.enter()
 
     def update(self):
         if self.state == 'IDLE':

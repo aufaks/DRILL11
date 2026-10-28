@@ -101,6 +101,10 @@ class Boy:
                     self.idle_started_at = monotonic()
 
     def draw(self):
+        if self.state == 'AUTORUN':
+            self.auto_run.draw(self.image, self.frame, self.face_dir, self.x)
+            return
+
         if self.state == 'SLEEP':
             src_rect = pico2d_impl.SDL_Rect(
                 self.frame * 100,

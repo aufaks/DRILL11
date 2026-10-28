@@ -27,12 +27,18 @@ class Boy:
         self.image = load_image(str(image_path))
         self.machine = Machine(
             model=self,
-            states=['IDLE', 'RUN', 'SLEEP'],
+            states=['IDLE', 'RUN', 'SLEEP', 'AUTORUN'],
             transitions=[
                 {'trigger': 'sleep', 'source': 'IDLE', 'dest': 'SLEEP'},
                 {'trigger': 'wake_up', 'source': 'SLEEP', 'dest': 'IDLE'},
-                {'trigger': 'start_running', 'source': ['IDLE', 'SLEEP'], 'dest': 'RUN'},
+                {
+                    'trigger': 'start_running',
+                    'source': ['IDLE', 'SLEEP', 'AUTORUN'],
+                    'dest': 'RUN',
+                },
                 {'trigger': 'stop_running', 'source': 'RUN', 'dest': 'IDLE'},
+                {'trigger': 'start_auto_run', 'source': 'IDLE', 'dest': 'AUTORUN'},
+                {'trigger': 'stop_auto_run', 'source': 'AUTORUN', 'dest': 'IDLE'},
             ],
             initial='IDLE',
             auto_transitions=False,
